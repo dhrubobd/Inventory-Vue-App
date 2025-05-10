@@ -5,11 +5,16 @@ import tailwindcss from '@tailwindcss/vite';
 
 // import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
-plugins: [
-vue(),
-],
-build: {
-manifest: true,
-outDir: "public/build",
-},
+    plugins: [
+        vue(),
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+        tailwindcss(),
+    ],
+    build: {
+        manifest: true,
+        outDir: "public/build",
+    },
 });
