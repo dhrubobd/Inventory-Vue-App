@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('otp')->default(0);
             $table->string('password');
-            $table->string('mobile');
             $table->rememberToken();
             $table->timestamps();
         });
