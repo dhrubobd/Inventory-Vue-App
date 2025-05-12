@@ -8,6 +8,7 @@
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
         "axios": "^1.8.2",
+        "bootstrap": "^5.3.6",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
         "tailwindcss": "^4.0.0",
@@ -15,7 +16,11 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.9",
+        "@meforma/vue-toaster": "^1.3.0",
         "@vitejs/plugin-vue": "^5.2.4",
-        "vue": "^3.5.13"
+        "bootstrap": "^5.3.6",
+        "bootstrap-vue": "^2.23.1",
+        "vue": "^3.5.13",
+        "vue3-easy-data-table": "^1.5.47"
     }
 }
