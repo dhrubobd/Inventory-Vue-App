@@ -1,3 +1,50 @@
+<script setup>
+import { usePage, router } from '@inertiajs/vue3'
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster();
+import InvoiceDetails from './InvoiceDetails.vue'
+import { ref } from "vue";
+let page = usePage()
+
+const show = ref(false)
+const customer = ref()
+
+const searchValue = ref()
+const searchField = ref(['customer.name'])
+
+const Header = [
+    { text: "Name", value: "customer.name" },
+    { text: "Customer Id", value: "customer.id" },
+    { text: "Phone", value: "customer.mobile" },
+    { text: "Total", value: "total" },
+    { text: "Discount", value: "discount" },
+    { text: "Vat", value: "vat" },
+    { text: "Payable", value: "payable" },
+    { text: "Action", value: "action" },
+];
+
+const Item = ref(page.props.list)
+
+const showDetails = (id) =>{
+    show.value = !show.value
+    customer.value = Item.value.find(item => item.id === id)
+}
+
+const closeModal = () => {
+    show.value = false
+}
+
+const DeleteClick = (id) => {
+    let text = "Do you want to delete";
+    if (confirm(text) === true) {
+        router.get(`/invoice-delete/${id}`)
+        toaster.success('Invoice Deleted Successfully');
+    } else {
+        text = "You canceled!";
+    }
+}
+
+</script>
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -37,51 +84,3 @@
 
     </div>
 </template>
-<script setup>
-import { usePage, router } from '@inertiajs/vue3'
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
-import InvoiceDetails from './InvoiceDetails.vue'
-import { ref } from "vue";
-let page = usePage()
-
-const show = ref(false)
-const customer = ref()
-
-const searchValue = ref()
-const searchField = ref(['customer.name'])
-
-const Header = [
-    { text: "Name", value: "customer.name" },
-    { text: "Customer Id", value: "customer.id" },
-    { text: "Phone", value: "customer.mobile" },
-    { text: "Total", value: "total" },
-    { text: "Discount", value: "discount" },
-    { text: "Vat", value: "vat" },
-    { text: "Payable", value: "payable" },
-    { text: "Action", value: "action" },
-];
-
-const Item = ref(page.props.list)
-
-const showDetails = (id) =>{
-    show.value = !show.value
-    customer.value = Item.value.find(item => item.id === id)
-    console.log(customer.value);
-}
-
-const closeModal = () => {
-    show.value = false
-}
-
-const DeleteClick = (id) => {
-    let text = "Do you want to delete";
-    if (confirm(text) === true) {
-        router.get(`/invoice-delete/${id}`)
-        toaster.success('Invoice Deleted Successfully');
-    } else {
-        text = "You canceled!";
-    }
-}
-
-</script>

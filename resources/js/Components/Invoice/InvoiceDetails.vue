@@ -1,3 +1,27 @@
+<script setup>
+import { defineProps, defineEmits } from 'vue'
+
+const props = defineProps({
+    customer: Object
+})
+const emit = defineEmits(['close'])
+
+const closeModal = () =>{
+    emit('close')
+}
+
+const printInvoice = () => {
+    const printContent = document.querySelector('.modal-body').innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+    location.reload();
+}
+</script>
+
+
+
 <template>
     <div class="modal-backdrop">
         <div class="modal-content modal-lg modal-dialog-centered">
@@ -72,27 +96,6 @@
     </div>
 </template>
 
-<script setup>
-import { defineProps, defineEmits } from 'vue'
-
-const props = defineProps({
-    customer: Object
-})
-const emit = defineEmits(['close'])
-
-const closeModal = () =>{
-    emit('close')
-}
-
-const printInvoice = () => {
-    const printContent = document.querySelector('.modal-body').innerHTML;
-    const originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    location.reload();
-}
-</script>
 
 <style scoped>
 @page{
@@ -114,7 +117,6 @@ body::after {
     justify-content: center;
     align-items: center;
     z-index: 1500;
-    /* Bootstrap modal z-index */
 }
 
 .modal-content {
@@ -122,11 +124,8 @@ body::after {
     padding: 20px;
     border-radius: 10px;
     width: 80%;
-    /* Make the modal larger like Bootstrap's modal-lg */
     max-height: 90vh;
-    /* Limit the height of the modal */
     overflow-y: auto;
-    /* Enable scrolling inside the modal if content exceeds height */
 }
 
 .modal-body {

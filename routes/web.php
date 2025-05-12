@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +51,13 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::get('/delete-customer/{id}', [CustomerController::class, 'customerDelete'])->name('CustomerDelete');
     Route::get('/list-customer', [CustomerController::class, 'customerList'])->name('CustomerList');
     Route::post('/customer-by-id', [CustomerController::class, 'customerById'])->name('CustomerById');
+
+    //Sale
+    Route::get('/create-sale', [SaleController::class, 'salePage'])->name('SalePage');
+
+    //Invoice all routes
+    Route::post('/invoice-create', [InvoiceController::class, 'invoiceCreate'])->name('InvoiceCreate');
+    Route::get('/InvoiceListPage', [InvoiceController::class, 'invoiceListPage'])->name('InvoiceListPage');
+    Route::get('/invoice-delete/{id}', [InvoiceController::class, 'invoiceDelete'])->name('InvoiceDelete');
+    
 });

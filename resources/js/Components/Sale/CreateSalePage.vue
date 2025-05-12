@@ -1,7 +1,188 @@
+<script setup>
+import { useForm,usePage, router } from '@inertiajs/vue3'
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster();
+import { ref } from "vue";
+
+let page = usePage()
+
+const selectedProduct = ref([]);
+const selectedCustomer = ref(null);
+
+
+const CustomerHeader = [
+    { text: "Name", value: "name" },
+    { text: "Pick", value: "number" },
+];
+
+const CustomerItem = ref(page.props.customers);
+const addCustomerToSale = (Customer)=>{
+    selectedCustomer.value = (Customer);
+}
+const searchCustomerField = ref('name');
+const searchCustomerValue = ref();
+
+
+const ProductHeader = [
+    { text: "Image", value: "image" },
+    { text: "Name", value: "name" },
+    { text: "QTY", value: "unit" },
+    { text: "Action", value: "action" },
+];
+
+const ProductItem = ref(page.props.products);
+
+const searchProductField = ref('name');
+const searchProductValue = ref();
+
+const addProductToSale = (id, image, name, price, productUnit)=>{
+    const existingProduct = selectedProduct.value.find(product => product.id === id);
+    if(existingProduct){
+        if(existingProduct.existingQty > 0){
+            existingProduct.unit++;
+            existingProduct.existingQty--;
+        }else{
+            toaster.warning(`Product ${name} is out of stock`);
+        }
+    }else{
+        if(productUnit > 0){
+            const product = {
+                id: id,
+                image: image,
+                name: name,
+                price: price,
+                unit: 1,
+                existingQty: productUnit-1
+            };
+            selectedProduct.value.push(product);
+            calculateTotal();
+        }else{
+            toaster.warning(`Product ${name} is out of stock`);
+        }
+    }
+};
+
+
+
+const addQty = (id)=>{
+    const product = selectedProduct.value.find(product => product.id === id);
+    if(product.existingQty > 0){
+        product.unit++;
+        product.existingQty--;
+        calculateTotal();
+    }else{
+        toaster.warning(`Product ${product.name} is out of stock`);
+    }
+};
+
+const removeQty = (id)=>{
+    const product = selectedProduct.value.find(product => product.id === id);
+    if(product.unit > 1){
+        product.existingQty++;
+        product.unit--;
+        calculateTotal();
+    }
+};
+
+const removeProductFromSale = (index)=>{
+    selectedProduct.value.splice(index,1);
+    calculateTotal();
+};
+
+const vatRate = ref(5);
+const flatDiscount = ref(0);
+const discountPercent = ref(0);
+const total = ref(0);
+const vatAmount = ref(0);
+const discountAmount = ref(0);
+const usePercentageDiscount = ref(false);
+
+const calculateTotal = () =>{
+    return selectedProduct.value.reduce((sum, product) => sum + product.price * product.unit, 0);
+};
+
+const applyVat = ()=>{
+    vatAmount.value = (calculateTotal() * vatRate.value) / 100;
+    calculateTotal();
+}
+
+const removeVat = ()=>{
+    vatAmount.value = 0;
+    calculateTotal();
+}
+
+const applyDiscount = () =>{
+    if(usePercentageDiscount.value){
+        discountAmount.value = (calculateTotal() * discountPercent.value) / 100;
+    }else{
+        discountAmount.value = flatDiscount.value;
+    }
+    calculatePayable();
+}
+
+const removeDiscount = ()=>{
+    discountAmount.value = 0;
+    flatDiscount.value = 0;
+    discountPercent.value = 0;
+    calculatePayable();
+}
+
+const calculatePayable = () =>{
+    const totalAmount = calculateTotal();
+    payable.value = totalAmount + vatAmount.value - discountAmount.value;
+}
+
+const payable = ref(0);
+
+const form = useForm({
+    customer_id: '',
+    products: '',
+    vat: '',
+    discount: '',
+    payable: calculateTotal(),
+    total: '',
+});
+
+const createInvoice = ()=>{
+    if(!selectedCustomer.value){
+        toaster.warning('Please select a customer');
+        return;
+    }
+    if(selectedProduct.value.length === 0){
+        toaster.warning('Please select at least one product');
+        return;
+    }
+
+    form.customer_id = selectedCustomer.value.id;
+    form.products = selectedProduct.value;
+    form.total = total.value
+    form.vat = vatAmount.value;
+    form.discount = discountAmount.value;
+    form.payable = payable.value;
+
+    const calculatedTotal = calculateTotal();
+    form.total = calculatedTotal;
+    form.payable = payable.value;
+
+    form.post('/invoice-create',{
+        onSuccess: ()=>{
+            if(page.props.flash.status === true){
+                toaster.success(page.props.flash.message);
+                setTimeout(()=>{
+                    router.get('/InvoiceListPage');
+                },500);
+            }else{
+                toaster.warning(page.props.flash.message);
+            }
+        }
+    })
+};
+
+
+</script>
 <template>
      <div class="container-fluid">
         <div class="row">
-            <!-- Billing Selection -->
             <div class="col-md-4 col-lg-4 p-2">
                 <div class="card">
                     <div class="card-body">
@@ -161,189 +342,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { useForm,usePage, router } from '@inertiajs/vue3'
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
-import { ref } from "vue";
-
-let page = usePage()
-
-const selectedProduct = ref([]);
-const selectedCustomer = ref(null);
-
-//customer
-const CustomerHeader = [
-    { text: "Name", value: "name" },
-    { text: "Pick", value: "number" },
-];
-
-const CustomerItem = ref(page.props.customers);
-const addCustomerToSale = (Customer)=>{
-    selectedCustomer.value = (Customer);
-}
-const searchCustomerField = ref('name');
-const searchCustomerValue = ref();
-//end customer
-
-//product
-const ProductHeader = [
-    { text: "Image", value: "image" },
-    { text: "Name", value: "name" },
-    { text: "QTY", value: "unit" },
-    { text: "Action", value: "action" },
-];
-
-const ProductItem = ref(page.props.products);
-
-const searchProductField = ref('name');
-const searchProductValue = ref();
-
-const addProductToSale = (id, image, name, price, productUnit)=>{
-    const existingProduct = selectedProduct.value.find(product => product.id === id);
-    if(existingProduct){
-        if(existingProduct.existingQty > 0){
-            existingProduct.unit++;
-            existingProduct.existingQty--;
-        }else{
-            toaster.warning(`Product ${name} is out of stock`);
-        }
-    }else{
-        if(productUnit > 0){
-            const product = {
-                id: id,
-                image: image,
-                name: name,
-                price: price,
-                unit: 1,
-                existingQty: productUnit-1
-            };
-            selectedProduct.value.push(product);
-            calculateTotal();
-        }else{
-            toaster.warning(`Product ${name} is out of stock`);
-        }
-    }
-};//end method
-
-//end product
-
-//Start Billed to
-const addQty = (id)=>{
-    const product = selectedProduct.value.find(product => product.id === id);
-    if(product.existingQty > 0){
-        product.unit++;
-        product.existingQty--;
-        calculateTotal();
-    }else{
-        toaster.warning(`Product ${product.name} is out of stock`);
-    }
-};//end addQty
-
-const removeQty = (id)=>{
-    const product = selectedProduct.value.find(product => product.id === id);
-    if(product.unit > 1){
-        product.existingQty++;
-        product.unit--;
-        calculateTotal();
-    }
-};//end addQty
-
-const removeProductFromSale = (index)=>{
-    selectedProduct.value.splice(index,1);
-    calculateTotal();
-};//end method
-
-const vatRate = ref(5);
-const flatDiscount = ref(0);
-const discountPercent = ref(0);
-const total = ref(0);
-const vatAmount = ref(0);
-const discountAmount = ref(0);
-const usePercentageDiscount = ref(false);
-
-const calculateTotal = () =>{
-    return selectedProduct.value.reduce((sum, product) => sum + product.price * product.unit, 0);
-};
-
-const applyVat = ()=>{
-    vatAmount.value = (calculateTotal() * vatRate.value) / 100;
-    calculateTotal();
-}//end method
-
-const removeVat = ()=>{
-    vatAmount.value = 0;
-    calculateTotal();
-}//end method
-
-const applyDiscount = () =>{
-    if(usePercentageDiscount.value){
-        discountAmount.value = (calculateTotal() * discountPercent.value) / 100;
-    }else{
-        discountAmount.value = flatDiscount.value;
-    }
-    calculatePayable();
-}//end method
-
-const removeDiscount = ()=>{
-    discountAmount.value = 0;
-    flatDiscount.value = 0;
-    discountPercent.value = 0;
-    calculatePayable();
-}//end method
-
-const calculatePayable = () =>{
-    const totalAmount = calculateTotal();
-    payable.value = totalAmount + vatAmount.value - discountAmount.value;
-}//end method
-
-const payable = ref(0);
-
-const form = useForm({
-    customer_id: '',
-    products: '',
-    vat: '',
-    discount: '',
-    payable: calculateTotal(),
-    total: '',
-});
-
-const createInvoice = ()=>{
-    if(!selectedCustomer.value){
-        toaster.warning('Please select a customer');
-        return;
-    }
-    if(selectedProduct.value.length === 0){
-        toaster.warning('Please select at least one product');
-        return;
-    }
-
-    form.customer_id = selectedCustomer.value.id;
-    form.products = selectedProduct.value;
-    form.total = total.value
-    form.vat = vatAmount.value;
-    form.discount = discountAmount.value;
-    form.payable = payable.value;
-
-    const calculatedTotal = calculateTotal();
-    form.total = calculatedTotal;
-    form.payable = payable.value;
-
-    form.post('/invoice-create',{
-        onSuccess: ()=>{
-            if(page.props.flash.status === true){
-                toaster.success(page.props.flash.message);
-                setTimeout(()=>{
-                    router.get('/InvoiceListPage');
-                },500);
-            }else{
-                toaster.warning(page.props.flash.message);
-            }
-        }
-    })
-};
-
-//end Billed to
-
-</script>
