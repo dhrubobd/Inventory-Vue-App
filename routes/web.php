@@ -10,7 +10,7 @@ use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return inertia('Home');
+    return inertia('LoginPage');
 });
 Route::get('/login',[UserController::class, 'loginPage'])->name('login');
 Route::get('/logout', [UserController::class, 'userLogout'])->name('logout');
