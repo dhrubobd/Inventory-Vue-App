@@ -1,36 +1,3 @@
-<template>
-    <div class="container-fluid">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <a href="/CustomerPage" class="btn btn-success mx-3 btn-sm">
-                                Back
-                            </a>
-                        </div>
-                        <form @submit.prevent="submit">
-                            <div class="card-body">
-                                <h4>Save Customer</h4>
-                                <input id="name" name="name" v-model="form.name" placeholder="Customer Name"
-                                    class="form-control" type="text" />
-                                <br />
-                                <input id="email" name="email" v-model="form.email" placeholder="Customer Email"
-                                    class="form-control" type="email" />
-                                <br />
-                                <input id="mobile" name="phone" v-model="form.mobile" placeholder="Customer Phone"
-                                    class="form-control" type="text" />
-                                <br />
-                                <button type="submit" class="btn w-100 btn-success">Save Change</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { useForm, usePage, router, Link } from '@inertiajs/vue3'
 import { createToaster } from "@meforma/vue-toaster";
@@ -69,3 +36,36 @@ function submit() {
     })
 }
 </script>
+
+<template>
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <a href="/CustomerPage" class="btn btn-success mx-3 btn-sm">
+                                Back
+                            </a>
+                        </div>
+                        <form @submit.prevent="submit">
+                            <div class="card-body">
+                                <h4>Save Customer</h4>
+                                <input id="name" name="name" v-model="form.name" placeholder="Customer Name"
+                                    class="form-control" type="text" />
+                                <br />
+                                <input id="email" name="email" v-model="form.email" placeholder="Customer Email"
+                                    class="form-control" type="email" />
+                                <br />
+                                <input id="mobile" name="phone" v-model="form.mobile" placeholder="Customer Phone"
+                                    class="form-control" type="text" />
+                                <br />
+                                <button type="submit" class="btn w-100 btn-success">Save Change</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

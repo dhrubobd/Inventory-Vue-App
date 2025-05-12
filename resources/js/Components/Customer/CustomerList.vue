@@ -1,3 +1,31 @@
+<script setup>
+import { usePage, router, Link } from '@inertiajs/vue3'
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster();
+import { ref } from "vue";
+
+let page = usePage()
+
+const Header = [
+    { text: "Name", value: "name" },
+    { text: "Email", value: "email" },
+    { text: "Mobile", value: "mobile" },
+    { text: "Action", value: "action" },
+];
+
+const Item = ref(page.props.customers)
+const searchValue = ref()
+
+const DeleteClick = (id) => {
+    let text = "Do you want to delete";
+    if (confirm(text) === true) {
+        router.get(`/delete-customer/${id}`)
+        toaster.success('Customer Deleted Successfully');
+    } else {
+        text = "You canceled!";
+    }
+}
+</script>
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -40,32 +68,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { usePage, router, Link } from '@inertiajs/vue3'
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
-import { ref } from "vue";
-
-let page = usePage()
-
-const Header = [
-    { text: "Name", value: "name" },
-    { text: "Email", value: "email" },
-    { text: "Mobile", value: "mobile" },
-    { text: "Action", value: "action" },
-];
-
-const Item = ref(page.props.customers)
-const searchValue = ref()
-
-const DeleteClick = (id) => {
-    let text = "Do you want to delete";
-    if (confirm(text) === true) {
-        router.get(`/delete-customer/${id}`)
-        toaster.success('Customer Deleted Successfully');
-    } else {
-        text = "You canceled!";
-    }
-}
-</script>

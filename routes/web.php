@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\SessionAuthenticate;
@@ -39,5 +40,13 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::post('/create-product', [ProductController::class, 'createProduct'])->name('CreateProduct');
     Route::post('/update-product', [ProductController::class, 'productUpdate'])->name('ProductUpdate');
     Route::get('/delete-product/{id}', [ProductController::class, 'productDelete'])->name('ProductDelete');
-    
+
+    //Customer
+    Route::get('/CustomerPage', [CustomerController::class, 'customerPage'])->name('CustomerPage');
+    Route::get('/CustomerSavePage', [CustomerController::class, 'customerSavePage'])->name('CustomerSavePage');
+    Route::post('/create-customer', [CustomerController::class, 'createCustomer'])->name('CreateCustomer');
+    Route::post('/update-customer', [CustomerController::class, 'customerUpdate'])->name('CustomerUpdate');
+    Route::get('/delete-customer/{id}', [CustomerController::class, 'customerDelete'])->name('CustomerDelete');
+    Route::get('/list-customer', [CustomerController::class, 'customerList'])->name('CustomerList');
+    Route::post('/customer-by-id', [CustomerController::class, 'customerById'])->name('CustomerById');
 });
