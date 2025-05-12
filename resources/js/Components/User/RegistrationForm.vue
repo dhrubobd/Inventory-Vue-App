@@ -11,8 +11,6 @@ import { Link, useForm, usePage, router } from "@inertiajs/vue3";
             toaster.warning("Name is required");
         }else if(form.email.length === 0){
             toaster.warning("Email is required");
-        }else if(form.mobile.length === 0){
-            toaster.warning("Mobile is required");
         }else if(form.password.length === 0){
             toaster.warning("Password is required");
         }else{
@@ -41,26 +39,22 @@ import { Link, useForm, usePage, router } from "@inertiajs/vue3";
                             <div class="container-fluid m-0 p-0">
                                 <div class="row m-0 p-0">
 
-                                    <div class="col-md-4 p-2">
+                                    <div class="col-md-6 p-2">
                                         <label>Name</label>
                                         <input id="name" v-model="form.name" placeholder="First Name" class="form-control" type="text" />
                                     </div>
 
-                                    <div class="col-md-4 p-2">
+                                    <div class="col-md-6 p-2">
                                         <label>Email Address</label>
                                         <input id="email" v-model="form.email" placeholder="User Email" class="form-control" type="email" />
                                     </div>
 
-                                    <div class="col-md-4 p-2">
-                                        <label>Mobile Number</label>
-                                        <input id="mobile" v-model="form.mobile" placeholder="Mobile" class="form-control" type="mobile" />
-                                    </div>
-                                    <div class="col-md-4 p-2">
+                                    <div class="col-md-6 p-2">
                                         <label>Password</label>
                                         <input id="password" v-model="form.password" placeholder="User Password" class="form-control"
                                             type="password" />
                                     </div>
-                                    <div class="col-md-4 p-2">
+                                    <div class="col-md-6 p-2">
                                         <label>Confirm Password</label>
                                         <input id="cpassword" placeholder="User Confirm Password" class="form-control"
                                             type="password" />

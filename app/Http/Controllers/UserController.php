@@ -44,7 +44,6 @@ class UserController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
-                'mobile' => 'required',
             ]);
 
             $user = User::create([
@@ -132,7 +131,7 @@ class UserController extends Controller
         $count = User::where('email',$email)->count();
 
         if($count == 1){
-            // Mail::to($email)->send(new OTPMail($otp));
+            Mail::to($email)->send(new OTPMail($otp));
             User::where('email', $email)->update(['otp' => $otp]);
             $request->session()->put('email', $email);
 
