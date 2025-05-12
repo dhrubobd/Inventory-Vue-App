@@ -1,3 +1,33 @@
+<script setup>
+import { usePage, router, Link } from '@inertiajs/vue3'
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster();
+import { ref } from "vue";
+let page = usePage()
+
+const Header = [
+    { text: "Image", value: "image" },
+    { text: "Name", value: "name" },
+    { text: "Category", value: "category.name" },
+    { text: "Price", value: "price" },
+    { text: "Quantity", value: "unit" },
+    { text: "Action", value: "action" },
+];
+
+const Item = ref(page.props.products)
+const searchValue = ref()
+
+const DeleteClick = (id) => {
+    let text = "Do you want to delete";
+    if (confirm(text) === true) {
+        router.get(`/delete-product/${id}`)
+        toaster.success('Product Deleted Successfully');
+    } else {
+        text = "You canceled!";
+    }
+}
+</script>
+
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -40,33 +70,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { usePage, router, Link } from '@inertiajs/vue3'
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
-import { ref } from "vue";
-let page = usePage()
-
-const Header = [
-    { text: "Image", value: "image" },
-    { text: "Name", value: "name" },
-    { text: "Category", value: "category.name" },
-    { text: "Price", value: "price" },
-    { text: "Quantity", value: "unit" },
-    { text: "Action", value: "action" },
-];
-
-const Item = ref(page.props.products)
-const searchValue = ref()
-
-const DeleteClick = (id) => {
-    let text = "Do you want to delete";
-    if (confirm(text) === true) {
-        router.get(`/delete-product/${id}`)
-        toaster.success('Product Deleted Successfully');
-    } else {
-        text = "You canceled!";
-    }
-}
-</script>

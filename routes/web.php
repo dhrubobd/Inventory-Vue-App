@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,12 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
     Route::post('/update-category', [CategoryController::class, 'categoryUpdate'])->name('category.update');
     Route::get('/delete-category/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
+
+    //Product
+    Route::get('/ProductPage', [ProductController::class, 'productPage'])->name('product.page');
+    Route::get('/ProductSavePage', [ProductController::class, 'productSavePage'])->name('ProductSavePage');
+    Route::post('/create-product', [ProductController::class, 'createProduct'])->name('CreateProduct');
+    Route::post('/update-product', [ProductController::class, 'productUpdate'])->name('ProductUpdate');
+    Route::get('/delete-product/{id}', [ProductController::class, 'productDelete'])->name('ProductDelete');
+    
 });

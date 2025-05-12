@@ -1,23 +1,10 @@
-<template>
-    <div>
-        <label for="image">
-            <img :src="(preview || currentImage) ?? 'placeholder.png'" class="img-thumbnail" height="50px" width="50px" />
-        </label>
-        <input
-            @input="imageSelected($event)"
-            type="file"
-            name="image"
-            id="image" />
-    </div>
-</template>
-
 <script setup>
 import { ref } from "vue";
 const props = defineProps({
     productImage: String,
 })
-
-const currentImage = props.productImage ? props.productImage : 'placeholder.png'
+const dummyImage = ref('https://placehold.co/100x100?text=Product');
+const currentImage = props.productImage ? props.productImage : dummyImage
 const preview = ref(currentImage)
 
 const emit = defineEmits(['image'])
@@ -31,3 +18,15 @@ const imageSelected = (e) => {
 }
 
 </script>
+<template>
+    <div>
+        <label for="image">
+            <img :src="(preview || currentImage) ?? dummyImage" class="img-thumbnail" height="50px" width="50px" />
+        </label>
+        <input
+            @input="imageSelected($event)"
+            type="file"
+            name="image"
+            id="image" />
+    </div>
+</template>
