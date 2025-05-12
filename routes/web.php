@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\SessionAuthenticate;
 use Illuminate\Support\Facades\Route;
@@ -24,5 +25,10 @@ Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::get('/ProfilePage', [UserController::class, 'profilePage']);
     Route::post('/user-update', [UserController::class, 'userUpdate']);
 
-    
+    //Category
+    Route::get('/CategoryPage', [CategoryController::class, 'categoryPage'])->name('CategoryPage');
+    Route::get('/CategorySavePage', [CategoryController::class, 'categorySavePage'])->name('CategorySavePage');
+    Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
+    Route::post('/update-category', [CategoryController::class, 'categoryUpdate'])->name('category.update');
+    Route::get('/delete-category/{id}', [CategoryController::class, 'categoryDelete'])->name('category.delete');
 });

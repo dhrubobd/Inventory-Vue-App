@@ -1,3 +1,28 @@
+<script setup>
+    import { Link, useForm, usePage, router } from "@inertiajs/vue3";
+    import { createToaster } from "@meforma/vue-toaster";
+    const toaster = createToaster({ position: "top-right" });
+    import { ref } from "vue";
+
+
+    let page = usePage();
+    const Header = [
+        { text: "Name", value: "name" },
+        { text: "Action", value: "number" },
+    ]
+    const Item = ref(page.props.categories);
+
+    const searchValue = ref();
+    const DeleteClick = (id) => {
+        let text = "Do you went to delete"
+        if(confirm(text)===true){
+            router.get(`/delete-category/${id}`);
+            toaster.success("Category Deleted successfully");
+        }else{
+            text = "you canceled!";
+        }
+    }
+</script>
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -31,7 +56,7 @@
                                 show-index
                                 >
                                 <template #item-number="{ id, name }">
-                                    <a class="btn btn-success mx-3 btn-sm" :href="`/CategorySavePage?id=${id}`">Edit</a>
+                                    <Link class="btn btn-success mx-3 btn-sm" :href="`/CategorySavePage?id=${id}`">Edit</Link>
                                     <button class="btn btn-danger btn-sm" @click="DeleteClick(id)">Delete</button>
                                 </template>
                             </EasyDataTable>
@@ -42,29 +67,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-    import { Link, useForm, usePage, router } from "@inertiajs/vue3";
-    import { createToaster } from "@meforma/vue-toaster";
-    const toaster = createToaster({ position: "top-right" });
-    import { ref } from "vue";
-
-
-    let page = usePage();
-    const Header = [
-        { text: "Name", value: "name" },
-        { text: "Action", value: "number" },
-    ]
-    const Item = ref(page.props.categories);
-
-    const searchValue = ref();
-    const DeleteClick = (id) => {
-        let text = "Do you went to delete"
-        if(confirm(text)===true){
-            router.get(`/delete-category/${id}`);
-            toaster.success("Category Deleted successfully");
-        }else{
-            text = "you canceled!";
-        }
-    }
-</script>

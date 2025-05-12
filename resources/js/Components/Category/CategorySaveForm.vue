@@ -1,30 +1,3 @@
-<template>
-    <div class="container-fluid">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <Link href="/CategoryPage" class="btn btn-success mx-3 btn-sm">
-                            Back
-                            </Link>
-                        </div>
-                        <form @submit.prevent="submit">
-                            <div class="card-body">
-                                <h4>Save Category</h4>
-                                <input id="name" v-model="form.name" name="name" placeholder="Category Name"
-                                    class="form-control" type="text" />
-                                <br />
-                                <button type="submit" class="btn w-100 btn-success">Save Change</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { Link, useForm, usePage, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
@@ -63,3 +36,29 @@ function submit() {
 }
 
 </script>
+<template>
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <Link href="/CategoryPage" class="btn btn-success mx-3 btn-sm">
+                            Back
+                            </Link>
+                        </div>
+                        <form @submit.prevent="submit">
+                            <div class="card-body">
+                                <h4>Save Category</h4>
+                                <input id="name" v-model="form.name" name="name" placeholder="Category Name"
+                                    class="form-control" type="text" />
+                                <br />
+                                <button type="submit" class="btn w-100 btn-success">Save Change</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
