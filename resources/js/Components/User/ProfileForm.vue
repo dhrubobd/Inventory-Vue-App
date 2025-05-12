@@ -1,3 +1,34 @@
+<script setup>
+import { useForm, usePage, router } from "@inertiajs/vue3";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster();
+
+const form = useForm({ name: "", email: "", mobile: "" });
+const page = usePage();
+
+form.name = page.props.user.name;
+form.email = page.props.user.email;
+form.mobile = page.props.user.mobile;
+
+function submit() {
+    if (form.name.length === 0) {
+        toaster.error("Name is required");
+    } else if (form.email.length === 0) {
+        toaster.error("Email is required");
+    } else {
+        form.post("/user-update", {
+            onSuccess: () => {
+                if (page.props.flash.status === true) {
+                    router.get('/ProfilePage');
+                    toaster.success(page.props.flash.message);
+                } else {
+                    toaster.error(page.props.flash.message);
+                }
+            }
+        });
+    }
+}
+</script>
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -18,11 +49,6 @@
                                         <label>Email Address</label>
                                         <input id="email" disabled v-model="form.email" placeholder="User Email" class="form-control" type="email" />
                                     </div>
-
-                                    <div class="col-md-4 p-2">
-                                        <label>Mobile Number</label>
-                                        <input id="mobile" v-model="form.mobile" placeholder="Mobile" class="form-control" type="mobile" />
-                                    </div>
                                 </div>
                                 <div class="row m-0 p-0">
                                     <div class="col-md-4 p-2">
@@ -37,36 +63,3 @@
         </div>
     </div>
 </template>
-<script setup>
-import { useForm, usePage, router } from "@inertiajs/vue3";
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
-
-const form = useForm({ name: "", email: "", mobile: "" });
-const page = usePage();
-
-form.name = page.props.user.name;
-form.email = page.props.user.email;
-form.mobile = page.props.user.mobile;
-
-function submit() {
-    if (form.name.length === 0) {
-        toaster.error("Name is required");
-    } else if (form.email.length === 0) {
-        toaster.error("Email is required");
-    } else if (form.mobile.length === 0) {
-        toaster.error("Mobile is required");
-    } else {
-        form.post("/user-update", {
-            onSuccess: () => {
-                if (page.props.flash.status === true) {
-                    router.get('/ProfilePage');
-                    toaster.success(page.props.flash.message);
-                } else {
-                    toaster.error(page.props.flash.message);
-                }
-            }
-        });
-    }
-}
-</script>

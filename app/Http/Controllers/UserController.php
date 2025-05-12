@@ -204,7 +204,6 @@ class UserController extends Controller
         User::where('email', $email)->update([
             'name' => $request->input('name'),
             'email'=> $request->input('email'),
-            'mobile'=> $request->input('mobile'),
         ]);
         $data = ['message'=> 'Profile update successfully','status'=>true, 'error'=>'' ];
         return redirect()->back()->with($data);

@@ -16,5 +16,6 @@ Route::post('/user-login', [UserController::class, 'userLogin'])->name('user.log
 
 Route::middleware(SessionAuthenticate::class)->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboardPage'])->name('dashboard');
-    
+    Route::get('/ProfilePage', [UserController::class, 'profilePage']);
+    Route::post('/user-update', [UserController::class, 'userUpdate']);
 });
