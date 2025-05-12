@@ -20,8 +20,3 @@ Follow the steps below to set up the project:
 ## User Login Access
 
 Please complete registration **[HERE](http://localhost:8000/registration)** with your valid email address to get a customer login access.
-
-## Admin Login Access
-
-**Email:** admin@admin.com
-**Password:** admin
