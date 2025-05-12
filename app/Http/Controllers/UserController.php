@@ -76,13 +76,14 @@ class UserController extends Controller
             $request->session()->put('email', $email);
             $request->session()->put('user_id', $user_id);
 
-            //$data = ['message'=>'User login successfully','status'=>true,'error'=>''];
-            //return redirect('/dashboard')->with($data);
-            return redirect()->route('dashboard')->with('success','Login Success');
+            $data = ['message'=>'User login successfully','status'=>true,'error'=>''];
+            return redirect('/dashboard')->with($data);
+            //return redirect()->route('dashboard')->with('success','Login Success');
         }else{
 
-            //$data = ['message'=>'Login faild','status'=>false,'error'=>''];
-            return redirect()->back()->with('error','Login Failed');
+            $data = ['message'=>'Login faild','status'=>false,'error'=>''];
+            return redirect()->back()->with($data);
+            //return redirect()->back()->with('error','Login Failed');
         }
 
     }

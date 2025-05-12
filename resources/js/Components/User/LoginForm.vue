@@ -5,14 +5,14 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const toaster = createToaster({ position: "top-right" });
 
+const page = usePage();
 const form = useForm({
     email: '',
     password: '',
 });
 
-const flash = computed(() => usePage().props.flash);
 
-const submitForm = () =>  {
+const submitForm = () => {
     if (form.email.length === 0) {
         toaster.warning("Email is required");
     } else if (form.password.length === 0) {
@@ -20,10 +20,13 @@ const submitForm = () =>  {
     } else {
         form.post('/user-login', {
             onSuccess: () => {
-                //console.log(flash.value.success);
-                
-                flash.value.success && toaster.success(flash.value.success);
-                flash.value.error && toaster.error(flash.value.error);
+
+                if (page.props.flash.status === true) {
+                    router.get('/dashboard');
+                    toaster.success(page.props.flash.message);
+                } else {
+                    toaster.error(page.props.flash.message);
+                }
             }
         });
     }
@@ -36,29 +39,28 @@ const submitForm = () =>  {
             <div class="col-md-7 animated fadeIn col-lg-6 center-screen">
                 <div class="card w-90  p-4">
                     <form @submit.prevent="submitForm">
-                    <div class="card-body">
-                        <h4>SIGN IN</h4>
-                        <br />
-                        <input id="email" v-model="form.email" placeholder="User Email" class="form-control" type="email" />
-                        <br />
-                        <input id="password" v-model="form.password" placeholder="User Password" class="form-control" type="password" />
-                        <br />
-                        <button type="submit" class="btn w-100 btn-success">Login</button>
-                        <hr />
-                        <div class="float-end mt-3">
-                            <span>
-                                <Link class="text-center ms-3 h6" href="/registration">Sign Up </Link>
-                                <span class="ms-1">|</span>
-                                <Link class="text-center ms-3 h6" href="send-otp">Forget Password</Link>
-                            </span>
+                        <div class="card-body">
+                            <h4>SIGN IN</h4>
+                            <br />
+                            <input id="email" v-model="form.email" placeholder="User Email" class="form-control"
+                                type="email" />
+                            <br />
+                            <input id="password" v-model="form.password" placeholder="User Password"
+                                class="form-control" type="password" />
+                            <br />
+                            <button type="submit" class="btn w-100 btn-success">Login</button>
+                            <hr />
+                            <div class="float-end mt-3">
+                                <span>
+                                    <Link class="text-center ms-3 h6" href="/registration">Sign Up </Link>
+                                    <span class="ms-1">|</span>
+                                    <Link class="text-center ms-3 h6" href="send-otp">Forget Password</Link>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</template >
-
-
-
+</template>

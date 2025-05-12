@@ -1,3 +1,34 @@
+<script setup>
+import { Link, useForm, usePage, router } from "@inertiajs/vue3";
+    import { createToaster } from "@meforma/vue-toaster";
+    const toaster = createToaster();
+
+    const form = useForm({ name: "", email: "", mobile: "", password: "" });
+    const page = usePage();
+
+    function submit(){
+        if(form.name.length === 0){
+            toaster.warning("Name is required");
+        }else if(form.email.length === 0){
+            toaster.warning("Email is required");
+        }else if(form.mobile.length === 0){
+            toaster.warning("Mobile is required");
+        }else if(form.password.length === 0){
+            toaster.warning("Password is required");
+        }else{
+            form.post("/user-registration", {
+                onSuccess: () => {
+                    if(page.props.flash.status === true){
+                        router.get('/dashboard');
+                        toaster.success("Registration Successful");
+                    }else{
+                        toaster.error(page.props.flash.message);
+                    }
+                }
+            });
+        }
+    }
+</script>
 <template>
     <div class="container">
         <div class="row justify-content-center">
@@ -49,35 +80,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { Link, useForm, usePage, router } from "@inertiajs/vue3";
-    import { createToaster } from "@meforma/vue-toaster";
-    const toaster = createToaster();
-
-    const form = useForm({ name: "", email: "", mobile: "", password: "" });
-    const page = usePage();
-
-    function submit(){
-        if(form.name.length === 0){
-            toaster.warning("Name is required");
-        }else if(form.email.length === 0){
-            toaster.warning("Email is required");
-        }else if(form.mobile.length === 0){
-            toaster.warning("Mobile is required");
-        }else if(form.password.length === 0){
-            toaster.warning("Password is required");
-        }else{
-            form.post("/user-registration", {
-                onSuccess: () => {
-                    if(page.props.flash.status === true){
-                        router.get('/DashboardPage');
-                        toaster.success("Login successful");
-                    }else{
-                        toaster.error(page.props.flash.message);
-                    }
-                }
-            });
-        }
-    }
-</script>
